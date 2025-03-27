@@ -1,0 +1,60 @@
+table {
+    border-collapse: collapse;
+    border: 2px solid rgb(140 140 140);
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+thead {
+    background-color: rgba(0, 160, 255, 0.4);
+}
+
+th,
+td {
+    border: 1px solid rgb(160 160 160);
+    padding: 8px 10px;
+    text-align: center;
+}
+
+tbody > tr:nth-of-type(even) {
+    background-color: rgb(237 238 242);
+}
+
+.add_symbol {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.add_symbol:before {
+    content: "+";
+    display: flex; flex-direction: row; align-items: center; justify-content: center;
+    height: 1.5rem;
+    font-size: 2.8rem; text-align: center; color: green;
+}
+
+.remove_symbol {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.remove_symbol:before {
+    content: "-";
+    display: flex; flex-direction: row; align-items: center; justify-content: center;
+    height: 1rem;
+    font-size: 2.8rem; text-align: center; color: red;
+}
+
+.update_symbol {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.update_symbol:before {
+    content: "/";
+    display: flex; flex-direction: row; align-items: center; justify-content: center;
+    height: 1.5rem; width: 1.5rem;
+    font-size: 2.8rem; text-align: center; color: darkblue;
+}
+
+.add_symbol::before {font-family: sans-serif; font-weight: bold;}
