@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>User Data</title>
+        <link th:href="@{/css/main_style.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <table>
+            <tbody>
+                <tr>
+                    <td><label for="username">Login: </label></td>
+                    <td><label id="username" th:text="*{user.username}"></label></td>
+                </tr>
+                <tr>
+                    <td><label for="nickname">Nickname: </label></td>
+                    <td><label id="nickname" th:text="*{user.nickname}"></label></td>
+                </tr>
+                <tr>
+                    <td><label for="firstName">First Name:</label></td>
+                    <td><label id="firstName" th:text="*{user.firstName}"></label></td>
+                </tr>
+                <tr>
+                    <td><label for="lastName">Last Name:</label></td>
+                    <td><label id="lastName" th:text="*{user.lastName}"></label></td>
+                </tr>
+                <tr>
+                    <td><label for="roles">Roles:</label></td>
+                    <td>
+                        <div>
+                            <th:block th:each="role : ${user.getAuthorities()}" id="roles">
+                                <label th:text="${role.name()}"></label><br/>
+                            </th:block>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
