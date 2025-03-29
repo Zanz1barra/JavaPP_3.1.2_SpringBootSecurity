@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,12 +33,13 @@ public class WebSecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutUrl("/logout") // URL для выхода
+                        .logoutSuccessUrl("/login?logout") // Перенаправление после выхода
+                        .invalidateHttpSession(true) // Уничтожение сессии
+                        .deleteCookies("JSESSIONID") // Удаление куков
                         .permitAll()
                 )
-                .userDetailsService(userDetailsService) // Указываем наш сервис загрузки пользователей
-                .csrf(AbstractHttpConfigurer::disable); // В продакшене лучше включить CSRF
+                .userDetailsService(userDetailsService); // Указываем наш сервис загрузки пользователей
 
         return http.build();
     }

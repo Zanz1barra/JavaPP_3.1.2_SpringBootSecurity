@@ -6,6 +6,12 @@
         <link th:href="@{/css/main_style.css}" rel="stylesheet" />
     </head>
     <body>
+        <header>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit">Logout</button>
+            </form>
+        </header>
         <table>
             <tbody>
                 <tr>

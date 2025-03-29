@@ -8,6 +8,15 @@
         <link th:href="@{/css/main_style.css}" rel="stylesheet" />
     </head>
     <body>
+        <header>
+            <form th:action="@{/admin/}" method="get">
+                <button type="submit">Back to user list</button>
+            </form>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit">Logout</button>
+            </form>
+        </header>
         <table>
             <tbody>
                 <form method="post" th:Object="${addedUser}" th:action="@{/admin/add}">
