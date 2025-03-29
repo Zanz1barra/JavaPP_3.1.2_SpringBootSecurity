@@ -30,8 +30,6 @@ public class WebSecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-//                        .defaultSuccessUrl("/dashboard")
                         .successHandler(new AuthSuccessHandler())
                         .permitAll()
                 )

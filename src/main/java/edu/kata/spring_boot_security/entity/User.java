@@ -41,6 +41,17 @@ public class User implements UserDetails {
     @JoinColumn(name = "user_data_id")
     private UserData userData;
 
+    public User() {
+        setUserData(new UserData());
+    }
+
+    public User(String username, String password, List<String> roles, UserData userData) {
+        setUsername(username);
+        setPassword(password);
+        setRoles(roles);
+        setUserData(userData);
+    }
+
     public Long getId() {
         return id;
     }
@@ -68,11 +79,7 @@ public class User implements UserDetails {
     }
 
     public List<String> getRoles() {
-        return roles
-                .stream()
-                .map(role_string ->
-                        role_string.startsWith("ROLE_") ? role_string.substring(5) : role_string)
-                .collect(Collectors.toList());
+        return roles;
     }
 
     public void setRoles(List<String> roles) {
@@ -83,6 +90,9 @@ public class User implements UserDetails {
     public List<Role> getAuthorities() {
         return getRoles()
                 .stream()
+                .map(role_string ->
+                        (role_string.startsWith("ROLE_") ? role_string.substring(5) : role_string)
+                )
                 .map(Role::valueOf)
                 .collect(Collectors.toList());
     }
@@ -94,5 +104,29 @@ public class User implements UserDetails {
     public void setUserData(UserData userData) {
         this.userData = userData;
         userData.setUser(this);
+    }
+
+    public String getNickname() {
+        return userData.getNickname();
+    }
+
+    public void setNickname(String nickname) {
+        userData.setNickname(nickname);
+    }
+
+    public String getFirstName() {
+        return userData.getFirstname();
+    }
+
+    public void setFirstName(String firstName) {
+        userData.setFirstname(firstName);
+    }
+
+    public String getLastName() {
+        return userData.getLastname();
+    }
+
+    public void setLastName(String lastName) {
+        userData.setLastname(lastName);
     }
 }

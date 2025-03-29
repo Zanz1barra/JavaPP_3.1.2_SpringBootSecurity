@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add User Form</title>
+        <link th:href="@{/css/main_style.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <table>
+            <tbody>
+                <form method="post" th:Object="${addedUser}" th:action="@{/admin/add}">
+                    <tr>
+                        <td><label for="username">Login: </label></td>
+                        <td><input type="text" id="username" th:field="*{username}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="password">Password</label></td>
+                        <td><input type="password" id="password" th:field="*{password}" required>
+                    </tr>
+                    <tr>
+                        <td><label for="nickname">Nickname:</label></td>
+                        <td><input type="text" id="nickname" th:field="*{nickname}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="firstName">First Name:</label></td>
+                        <td><input type="text" id="firstName" th:field="*{firstName}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="lastName">Last Name:</label></td>
+                        <td><input type="text" id="lastName" th:field="*{lastName}" required></td>
+                    </tr>
+                    <tr>
+                        <td><label for="roles">Roles:</label></td>
+                        <td>
+                            <select th:field="*{roles}" id="roles" multiple required>
+                                <option th:each="role : ${roles}"
+                                        th:value="${role.authority}"
+                                        th:text="${role.name}"
+                                        th:selected="${role.getAuthority() == 'ROLE_USER'}">
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><button type="submit">Save</button></td>
+                    </tr>
+                </form>
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -20,11 +20,13 @@ public class UserDataServiceImpl implements UserDataService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserData> getUserDataList() {
         return userDataRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<UserData> getUserDataById(Long id) {
         return userDataRepository.findById(id);
     }

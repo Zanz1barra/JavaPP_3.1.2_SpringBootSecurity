@@ -17,21 +17,14 @@
                         <th scope="col">Nickname</th>
                         <th scope="col">Firstname</th>
                         <th scope="col">Lastname</th>
-                        <th scope="col" colspan="2"></th>
+                        <th scope="col" colspan="2">
+                            <form th:action="@{/admin/add_user}" th:method="get">
+                                <button class="add_symbol" type="submit"></button>
+                            </form>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <div th:if="${beingUpdateUser.id == null}">
-                        <tr>
-                            <form method="post" th:Object="${beingUpdateUser}" th:action="@{/users/add}">
-                                <td>New</td>
-                                <td><input th:field="*{nickname}" type="text"/></td>
-                                <td><input th:field="*{firstname}" type="text"/></td>
-                                <td><input th:field="*{lastname}" type="text"/></td>
-                                <td colspan="2"><button class="add_symbol" type="submit"></button></td>
-                            </form>
-                        </tr>
-                    </div>
                     <tr th:each="userData : ${userDataList}">
                         <div th:if="${(beingUpdateUser.id == null) || (userData.id != beingUpdateUser.id)}">
                             <td th:utext="${userData.id}">Id</td>
@@ -39,20 +32,20 @@
                             <td th:utext="${userData.firstname}">Firstname</td>
                             <td th:utext="${userData.lastname}">Lastname</td>
                             <td>
-                                <form th:action="@{/users/update}" th:object="${userData}" th:method="get">
+                                <form th:action="@{/admin/update/}" th:object="${userData}" th:method="get">
                                     <input type="hidden" name="update_user_id" th:value="${userData.id}"/>
                                     <button class="update_symbol" type="submit"></button>
                                 </form>
                             </td>
                             <td>
-                                <form th:action="@{/users/delete}" th:method="post">
+                                <form th:action="@{/admin/delete/}" th:method="post">
                                     <input type="hidden" name="id" th:value="${userData.id}"/>
                                     <button class="remove_symbol"></button>
                                 </form>
                             </td>
                         </div>
                         <div th:if="${(beingUpdateUser.id != null) && (userData.id == beingUpdateUser.id)}">
-                            <form method="post" th:Object="${beingUpdateUser}" th:action="@{/users/update(id=${beingUpdateUser.id})}" >
+                            <form method="post" th:Object="${beingUpdateUser}" th:action="@{/admin/update/(id=${beingUpdateUser.id})}" >
                                 <td th:utext="${beingUpdateUser.id}">Id</td>
                                 <td><input th:field="*{nickname}" type="text"/></td>
                                 <td><input th:field="*{firstname}" type="text"/></td>
@@ -60,7 +53,7 @@
                                 <td><button class="add_symbol" type="submit"></button></td>
                             </form>
                                 <td>
-                                    <form th:action="@{/users/delete}" th:method="post">
+                                    <form th:action="@{/admin/delete/}" th:method="post">
                                         <input type="hidden" name="id" th:value="${userData.id}"/>
                                         <button class="remove_symbol"></button>
                                     </form>

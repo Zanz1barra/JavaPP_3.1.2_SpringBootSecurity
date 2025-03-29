@@ -7,37 +7,44 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
+import edu.kata.spring_boot_security.auth.Role;
+import edu.kata.spring_boot_security.entity.User;
 import edu.kata.spring_boot_security.entity.UserData;
 import edu.kata.spring_boot_security.service.UserDataService;
+import edu.kata.spring_boot_security.service.UserService;
 
 @Controller
-@RequestMapping(path = {"/","/users"})
-public class UsersController {
+@RequestMapping(path = {"/admin"})
+public class AdminController {
 
     private final UserDataService userDataService;
+    private final UserService userService;
 
-    public UsersController(UserDataService userDataService) {
+    public AdminController(UserDataService userDataService,
+                           UserService UserService) {
         this.userDataService = userDataService;
+        this.userService = UserService;
     }
 
     @GetMapping(path = {"", "/", "/all"})
     public String getUsersListWithFormForAddUser(ModelMap modelMap) {
         modelMap.addAttribute("beingUpdateUser", new UserData());
         modelMap.addAttribute("userDataList", userDataService.getUserDataList());
-        return "users";
+        return "admin/user_list";
     }
 
-    @PostMapping(path = {"/delete"})
-    public String deleteUserById(
-            @RequestParam(name = "id") Long id,
-            ModelMap modelMap) {
-        userDataService.deleteUserDataById(id);
-        return "redirect:..";
+    @GetMapping(path = {"/add_user"})
+    public String getAddUserForm(ModelMap modelMap) {
+        User user = new User();
+        modelMap.addAttribute("addedUser", user);
+        modelMap.addAttribute("roles", Role.values());
+        return "admin/add_user_form";
     }
 
-    @GetMapping(path = {"/update"})
+    @GetMapping(path = {"/update/"})
     public String getUsersListWithFormForUpdateUser(
             @RequestParam(name = "update_user_id") Long beingUpdateUserId,
             ModelMap modelMap) {
@@ -47,18 +54,31 @@ public class UsersController {
         }
         modelMap.addAttribute("beingUpdateUser", beingUpdateUser.get());
         modelMap.addAttribute("userDataList", userDataService.getUserDataList());
-        return "users";
+        return "admin/user_list";
     }
 
     @PostMapping(path = {"/add"})
-    public String addUser(UserData userData, ModelMap modelMap) {
-        userDataService.addUserData(userData);
-        return "redirect:..";
+    public String addUser(User user, ModelMap modelMap) {
+        System.out.println("Adding user");
+        if (user.getRoles() == null) {
+            System.out.println("Roles is null");
+            user.setRoles(List.of("ROLE_USER"));
+        }
+        userService.addUser(user);
+        return "redirect:/admin/";
     }
 
-    @PostMapping(path = {"/update"})
+    @PostMapping(path = {"/delete/"})
+    public String deleteUserById(
+            @RequestParam(name = "id") Long id,
+            ModelMap modelMap) {
+        userService.deleteUserByUserDataId(id);
+        return "redirect:/admin/";
+    }
+
+    @PostMapping(path = {"/update/"})
     public String updateUser(UserData userData, ModelMap modelMap) {
         userDataService.updateUserData(userData);
-        return "redirect:..";
+        return "redirect:/admin/";
     }
 }
