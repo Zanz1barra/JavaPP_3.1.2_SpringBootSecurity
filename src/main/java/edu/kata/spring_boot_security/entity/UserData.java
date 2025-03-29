@@ -3,8 +3,10 @@ package edu.kata.spring_boot_security.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,12 +26,17 @@ public class UserData {
     @Column(name = "lastname", nullable = false, length = 50)
     private String lastname;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public UserData() {}
 
-    public UserData(String nickname, String firstname, String lastname) {
+    public UserData(String nickname, String firstname, String lastname, User user) {
         setNickname(nickname);
         setFirstname(firstname);
         setLastname(lastname);
+        setUser(user);
     }
 
     public Long getId() {
@@ -62,5 +69,13 @@ public class UserData {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
