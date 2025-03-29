@@ -7,26 +7,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.kata.spring_boot_security.entity.User;
-import edu.kata.spring_boot_security.service.UserService;
-
-
 import java.util.Optional;
+
+import edu.kata.spring_boot_security.entity.UserData;
+import edu.kata.spring_boot_security.service.UserDataService;
 
 @Controller
 @RequestMapping(path = {"/","/users"})
 public class UsersController {
 
-    private final UserService userService;
+    private final UserDataService userDataService;
 
-    public UsersController(UserService userService) {
-        this.userService = userService;
+    public UsersController(UserDataService userDataService) {
+        this.userDataService = userDataService;
     }
 
     @GetMapping(path = {"", "/", "/all"})
     public String getUsersListWithFormForAddUser(ModelMap modelMap) {
-        modelMap.addAttribute("usersList", userService.getUsersList());
-        modelMap.addAttribute("beingUpdateUser", new User());
+        modelMap.addAttribute("beingUpdateUser", new UserData());
+        modelMap.addAttribute("userDataList", userDataService.getUserDataList());
         return "users";
     }
 
@@ -34,7 +33,7 @@ public class UsersController {
     public String deleteUserById(
             @RequestParam(name = "id") Long id,
             ModelMap modelMap) {
-        userService.deleteUserById(id);
+        userDataService.deleteUserDataById(id);
         return "redirect:..";
     }
 
@@ -42,24 +41,24 @@ public class UsersController {
     public String getUsersListWithFormForUpdateUser(
             @RequestParam(name = "update_user_id") Long beingUpdateUserId,
             ModelMap modelMap) {
-        Optional<User> beingUpdateUser = userService.getUserById(beingUpdateUserId);
+        Optional<UserData> beingUpdateUser = userDataService.getUserDataById(beingUpdateUserId);
         if (beingUpdateUser.isEmpty()) {
             throw new IllegalArgumentException("No user found with requested ID");
         }
         modelMap.addAttribute("beingUpdateUser", beingUpdateUser.get());
-        modelMap.addAttribute("usersList", userService.getUsersList());
+        modelMap.addAttribute("userDataList", userDataService.getUserDataList());
         return "users";
     }
 
     @PostMapping(path = {"/add"})
-    public String addUser(User user, ModelMap modelMap) {
-        userService.addUser(user);
+    public String addUser(UserData userData, ModelMap modelMap) {
+        userDataService.addUserData(userData);
         return "redirect:..";
     }
 
     @PostMapping(path = {"/update"})
-    public String updateUser(User user, ModelMap modelMap) {
-        userService.updateUser(user);
+    public String updateUser(UserData userData, ModelMap modelMap) {
+        userDataService.updateUserData(userData);
         return "redirect:..";
     }
 }

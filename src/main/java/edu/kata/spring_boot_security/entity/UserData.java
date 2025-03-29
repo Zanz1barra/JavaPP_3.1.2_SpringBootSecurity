@@ -8,8 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "user_data")
+public class UserData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,9 @@ public class User {
     @Column(name = "lastname", nullable = false, length = 50)
     private String lastname;
 
-    public User() {}
+    public UserData() {}
 
-    public User(String nickname, String firstname, String lastname) {
+    public UserData(String nickname, String firstname, String lastname) {
         setNickname(nickname);
         setFirstname(firstname);
         setLastname(lastname);

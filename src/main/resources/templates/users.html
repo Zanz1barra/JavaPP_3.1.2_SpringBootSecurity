@@ -32,26 +32,26 @@
                             </form>
                         </tr>
                     </div>
-                    <tr th:each="user : ${usersList}">
-                        <div th:if="${(beingUpdateUser.id == null) || (user.id != beingUpdateUser.id)}">
-                            <td th:utext="${user.id}">Id</td>
-                            <td th:utext="${user.nickname}">Nickname</td>
-                            <td th:utext="${user.firstname}">Firstname</td>
-                            <td th:utext="${user.lastname}">Lastname</td>
+                    <tr th:each="userData : ${userDataList}">
+                        <div th:if="${(beingUpdateUser.id == null) || (userData.id != beingUpdateUser.id)}">
+                            <td th:utext="${userData.id}">Id</td>
+                            <td th:utext="${userData.nickname}">Nickname</td>
+                            <td th:utext="${userData.firstname}">Firstname</td>
+                            <td th:utext="${userData.lastname}">Lastname</td>
                             <td>
-                                <form th:action="@{/users/update}" th:object="${user}" th:method="get">
-                                    <input type="hidden" name="update_user_id" th:value="${user.id}"/>
+                                <form th:action="@{/users/update}" th:object="${userData}" th:method="get">
+                                    <input type="hidden" name="update_user_id" th:value="${userData.id}"/>
                                     <button class="update_symbol" type="submit"></button>
                                 </form>
                             </td>
                             <td>
                                 <form th:action="@{/users/delete}" th:method="post">
-                                    <input type="hidden" name="id" th:value="${user.id}"/>
+                                    <input type="hidden" name="id" th:value="${userData.id}"/>
                                     <button class="remove_symbol"></button>
                                 </form>
                             </td>
                         </div>
-                        <div th:if="${(beingUpdateUser.id != null) && (user.id == beingUpdateUser.id)}">
+                        <div th:if="${(beingUpdateUser.id != null) && (userData.id == beingUpdateUser.id)}">
                             <form method="post" th:Object="${beingUpdateUser}" th:action="@{/users/update(id=${beingUpdateUser.id})}" >
                                 <td th:utext="${beingUpdateUser.id}">Id</td>
                                 <td><input th:field="*{nickname}" type="text"/></td>
@@ -61,7 +61,7 @@
                             </form>
                                 <td>
                                     <form th:action="@{/users/delete}" th:method="post">
-                                        <input type="hidden" name="id" th:value="${user.id}"/>
+                                        <input type="hidden" name="id" th:value="${userData.id}"/>
                                         <button class="remove_symbol"></button>
                                     </form>
                                 </td>
