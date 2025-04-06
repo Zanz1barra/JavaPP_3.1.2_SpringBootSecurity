@@ -19,23 +19,23 @@
                     <td><label id="username" th:text="*{user.username}"></label></td>
                 </tr>
                 <tr>
-                    <td><label for="nickname">Nickname: </label></td>
-                    <td><label id="nickname" th:text="*{user.nickname}"></label></td>
-                </tr>
-                <tr>
                     <td><label for="firstName">First Name:</label></td>
-                    <td><label id="firstName" th:text="*{user.firstName}"></label></td>
+                    <td><label id="firstName" th:text="*{user.firstname}"></label></td>
                 </tr>
                 <tr>
                     <td><label for="lastName">Last Name:</label></td>
-                    <td><label id="lastName" th:text="*{user.lastName}"></label></td>
+                    <td><label id="lastName" th:text="*{user.lastname}"></label></td>
+                </tr>
+                <tr>
+                    <td><label for="age">Nickname: </label></td>
+                    <td><label id="age" th:text="*{user.age}"></label></td>
                 </tr>
                 <tr>
                     <td><label for="roles">Roles:</label></td>
                     <td>
                         <div>
                             <th:block th:each="role : ${user.getAuthorities()}" id="roles">
-                                <label th:text="${role.name()}"></label><br/>
+                                <label th:text="${role.name}"></label><br/>
                             </th:block>
                         </div>
                     </td>

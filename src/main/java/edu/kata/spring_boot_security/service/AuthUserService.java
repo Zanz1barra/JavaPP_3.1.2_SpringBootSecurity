@@ -3,7 +3,6 @@ package edu.kata.spring_boot_security.service;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import edu.kata.spring_boot_security.entity.User;
 import edu.kata.spring_boot_security.repository.UserRepository;
@@ -18,7 +17,6 @@ public class AuthUserService implements UserDetailsService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository
                 .findByUsername(username)

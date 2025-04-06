@@ -19,7 +19,7 @@
         </header>
         <table>
             <tbody>
-                <form method="post" th:Object="${addedUser}" th:action="@{/admin/add}">
+                <form method="post" th:Object="${addedUser}" th:action="@{/admin/add/}">
                     <tr>
                         <td><label for="username">Login: </label></td>
                         <td><input type="text" id="username" th:field="*{username}" required></td>
@@ -29,25 +29,28 @@
                         <td><input type="password" id="password" th:field="*{password}" required>
                     </tr>
                     <tr>
-                        <td><label for="nickname">Nickname:</label></td>
-                        <td><input type="text" id="nickname" th:field="*{nickname}" required></td>
+                        <td><label for="nickname">Firstname:</label></td>
+                        <td><input type="text" id="nickname" th:field="*{firstname}" required></td>
                     </tr>
                     <tr>
-                        <td><label for="firstName">First Name:</label></td>
-                        <td><input type="text" id="firstName" th:field="*{firstName}" required></td>
+                        <td><label for="firstName">Lastname:</label></td>
+                        <td><input type="text" id="firstName" th:field="*{lastname}" required></td>
                     </tr>
                     <tr>
-                        <td><label for="lastName">Last Name:</label></td>
-                        <td><input type="text" id="lastName" th:field="*{lastName}" required></td>
+                        <td><label for="lastName">Age:</label></td>
+                        <td><input type="number" id="lastName" th:field="*{age}" required></td>
                     </tr>
                     <tr>
                         <td><label for="roles">Roles:</label></td>
                         <td>
-                            <select th:field="*{roles}" id="roles" multiple required>
-                                <option th:each="role : ${roles}"
-                                        th:value="${role.authority}"
-                                        th:text="${role.name}"
-                                        th:selected="${role.getAuthority() == 'ROLE_USER'}">
+                            <select th:field="*{roles}"
+                                    th:default="${allRoles.getFirst()}"
+                                    id="roles"
+                                    multiple
+                                    required>
+                                <option th:each="role : ${allRoles}"
+                                        th:value="${role.id}"
+                                        th:text="${role.name}">
                                 </option>
                             </select>
                         </td>

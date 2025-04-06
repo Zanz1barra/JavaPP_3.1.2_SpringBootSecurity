@@ -20,47 +20,50 @@
                 <thead>
                     <tr>
                         <th scope="col">Id</th>
-                        <th scope="col">Nickname</th>
                         <th scope="col">Firstname</th>
                         <th scope="col">Lastname</th>
+                        <th scope="col">Age</th>
                         <th scope="col" colspan="2">
-                            <form th:action="@{/admin/add_user}" th:method="get">
+                            <form th:action="@{/admin/add_user/}" th:method="get">
                                 <button class="add_symbol" type="submit"></button>
                             </form>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="userData : ${userDataList}">
-                        <div th:if="${(beingUpdateUser.id == null) || (userData.id != beingUpdateUser.id)}">
-                            <td th:utext="${userData.id}">Id</td>
-                            <td th:utext="${userData.nickname}">Nickname</td>
-                            <td th:utext="${userData.firstname}">Firstname</td>
-                            <td th:utext="${userData.lastname}">Lastname</td>
+                    <tr th:each="user : ${userList}">
+                        <div th:if="${(beingUpdateUser == null) || (user.id != beingUpdateUser.id)}">
+                            <td th:utext="${user.id}">Id</td>
+                            <td th:utext="${user.firstname}">Firstname</td>
+                            <td th:utext="${user.lastname}">Lastname</td>
+                            <td th:utext="${user.age}">Lastname</td>
                             <td>
-                                <form th:action="@{/admin/update/}" th:object="${userData}" th:method="get">
-                                    <input type="hidden" name="update_user_id" th:value="${userData.id}"/>
+                                <form th:action="@{/admin/update/}" th:object="${user}" th:method="get">
+                                    <input type="hidden" th:value="*{id}" name="id">
                                     <button class="update_symbol" type="submit"></button>
                                 </form>
                             </td>
                             <td>
-                                <form th:action="@{/admin/delete/}" th:method="post">
-                                    <input type="hidden" name="id" th:value="${userData.id}"/>
-                                    <button class="remove_symbol"></button>
+                                <form th:action="@{/admin/delete/}" th:object="${user}" th:method="post">
+                                    <input type="hidden" th:value="*{id}" name="id">
+                                    <button class="remove_symbol" type="submit"></button>
                                 </form>
                             </td>
                         </div>
-                        <div th:if="${(beingUpdateUser.id != null) && (userData.id == beingUpdateUser.id)}">
-                            <form method="post" th:Object="${beingUpdateUser}" th:action="@{/admin/update/(id=${beingUpdateUser.id})}" >
-                                <td th:utext="${beingUpdateUser.id}">Id</td>
-                                <td><input th:field="*{nickname}" type="text"/></td>
+                        <div th:if="${(beingUpdateUser != null) && (user.id == beingUpdateUser.id)}">
+                            <form method="post" th:Object="${beingUpdateUser}" th:action="@{/admin/update/}" >
+                                <td th:utext="*{id}">Id</td>
                                 <td><input th:field="*{firstname}" type="text"/></td>
                                 <td><input th:field="*{lastname}" type="text"/></td>
-                                <td><button class="add_symbol" type="submit"></button></td>
+                                <td><input th:field="*{age}" type="number"/></td>
+                                <td>
+                                    <input type="hidden" th:value="*{id}" name="id">
+                                    <button class="add_symbol" type="submit"></button>
+                                </td>
                             </form>
                                 <td>
-                                    <form th:action="@{/admin/delete/}" th:method="post">
-                                        <input type="hidden" name="id" th:value="${userData.id}"/>
+                                    <form th:action="@{/admin/delete/}" th:object="${user}" th:method="post">
+                                        <input type="hidden" th:value="*{id}" name="id">
                                         <button class="remove_symbol"></button>
                                     </form>
                                 </td>

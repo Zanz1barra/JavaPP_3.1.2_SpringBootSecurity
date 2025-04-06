@@ -1,22 +1,19 @@
 package edu.kata.spring_boot_security.entity;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import edu.kata.spring_boot_security.auth.Role;
 
 @Entity
 @Table(name = "users")
@@ -32,24 +29,31 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER) // Роли загружаются сразу с пользователем
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private List<String> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
-    @OneToOne
-    @JoinColumn(name = "user_data_id")
-    private UserData userData;
+    @Column(name = "firstname", nullable = false, length = 50)
+    private String firstname;
+
+    @Column(name = "lastname", nullable = false, length = 50)
+    private String lastname;
+
+    @Column(name = "age")
+    private Integer age;
 
     public User() {
-        setUserData(new UserData());
+        super();
     }
 
-    public User(String username, String password, List<String> roles, UserData userData) {
+    public User(String username, String password, List<Role> roles) {
         setUsername(username);
         setPassword(password);
         setRoles(roles);
-        setUserData(userData);
     }
 
     public Long getId() {
@@ -78,55 +82,53 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public List<String> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setRoles(Role... roles) {
+        this.roles = Arrays.asList(roles);
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     @Override
     public List<Role> getAuthorities() {
-        return getRoles()
-                .stream()
-                .map(role_string ->
-                        (role_string.startsWith("ROLE_") ? role_string.substring(5) : role_string)
-                )
-                .map(Role::valueOf)
-                .collect(Collectors.toList());
+        return getRoles();
     }
 
-    public UserData getUserData() {
-        return userData;
-    }
-
-    public void setUserData(UserData userData) {
-        this.userData = userData;
-        userData.setUser(this);
-    }
-
-    public String getNickname() {
-        return userData.getNickname();
-    }
-
-    public void setNickname(String nickname) {
-        userData.setNickname(nickname);
-    }
-
-    public String getFirstName() {
-        return userData.getFirstname();
-    }
-
-    public void setFirstName(String firstName) {
-        userData.setFirstname(firstName);
-    }
-
-    public String getLastName() {
-        return userData.getLastname();
-    }
-
-    public void setLastName(String lastName) {
-        userData.setLastname(lastName);
+    @Override
+    public String toString() {
+        return "User [id = " + id +
+                ", username = " + username +
+                ", roles = " + ((roles == null) ? null : roles.stream().map(Role::getName).toList()) +
+                ", firstname = " + firstname +
+                ", lastname = " + lastname + "]";
     }
 }

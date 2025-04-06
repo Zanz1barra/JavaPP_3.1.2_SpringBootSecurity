@@ -7,78 +7,70 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Optional;
-
-import edu.kata.spring_boot_security.auth.Role;
 import edu.kata.spring_boot_security.entity.User;
-import edu.kata.spring_boot_security.entity.UserData;
-import edu.kata.spring_boot_security.service.UserDataService;
+import edu.kata.spring_boot_security.service.RoleService;
 import edu.kata.spring_boot_security.service.UserService;
 
 @Controller
 @RequestMapping(path = {"/admin"})
 public class AdminController {
 
-    private final UserDataService userDataService;
     private final UserService userService;
+    private final RoleService roleService;
 
-    public AdminController(UserDataService userDataService,
-                           UserService UserService) {
-        this.userDataService = userDataService;
+    public AdminController(
+            UserService UserService,
+            RoleService roleService) {
         this.userService = UserService;
+        this.roleService = roleService;
     }
 
-    @GetMapping(path = {"", "/", "/all"})
-    public String getUsersListWithFormForAddUser(ModelMap modelMap) {
-        modelMap.addAttribute("beingUpdateUser", new UserData());
-        modelMap.addAttribute("userDataList", userDataService.getUserDataList());
+    @GetMapping(path = {"", "/", "/all", "/all/"})
+    public String getUsersListWithFormForAddUser(
+            ModelMap modelMap) {
+        modelMap.addAttribute("userList", userService.getUserList());
         return "admin/user_list";
     }
 
-    @GetMapping(path = {"/add_user"})
-    public String getAddUserForm(ModelMap modelMap) {
+    @GetMapping(path = {"/add_user/"})
+    public String getAddUserForm(
+            ModelMap modelMap) {
         User user = new User();
         modelMap.addAttribute("addedUser", user);
-        modelMap.addAttribute("roles", Role.values());
+        modelMap.addAttribute("allRoles", roleService.getRolesList());
         return "admin/add_user_form";
     }
 
     @GetMapping(path = {"/update/"})
     public String getUsersListWithFormForUpdateUser(
-            @RequestParam(name = "update_user_id") Long beingUpdateUserId,
+            @RequestParam(name = "id") Long userId,
             ModelMap modelMap) {
-        Optional<UserData> beingUpdateUser = userDataService.getUserDataById(beingUpdateUserId);
-        if (beingUpdateUser.isEmpty()) {
-            throw new IllegalArgumentException("No user found with requested ID");
-        }
-        modelMap.addAttribute("beingUpdateUser", beingUpdateUser.get());
-        modelMap.addAttribute("userDataList", userDataService.getUserDataList());
+        modelMap.addAttribute("beingUpdateUser", userService.getUserById(userId).orElse(null));
+        modelMap.addAttribute("userList", userService.getUserList());
         return "admin/user_list";
     }
 
-    @PostMapping(path = {"/add"})
-    public String addUser(User user, ModelMap modelMap) {
-        System.out.println("Adding user");
-        if (user.getRoles() == null) {
-            System.out.println("Roles is null");
-            user.setRoles(List.of("ROLE_USER"));
-        }
+    @PostMapping(path = {"/add/"})
+    public String addUser(
+            User user,
+            ModelMap modelMap) {
         userService.addUser(user);
         return "redirect:/admin/";
     }
 
     @PostMapping(path = {"/delete/"})
     public String deleteUserById(
-            @RequestParam(name = "id") Long id,
+            User user,
             ModelMap modelMap) {
-        userService.deleteUserByUserDataId(id);
+        userService.deleteUser(user);
         return "redirect:/admin/";
     }
 
     @PostMapping(path = {"/update/"})
-    public String updateUser(UserData userData, ModelMap modelMap) {
-        userDataService.updateUserData(userData);
+    public String updateUser(
+            User user,
+            ModelMap modelMap) {
+        userService.updateUser(user);
         return "redirect:/admin/";
     }
 }
